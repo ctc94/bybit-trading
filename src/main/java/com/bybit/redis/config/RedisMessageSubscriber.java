@@ -17,16 +17,16 @@ public class RedisMessageSubscriber implements MessageListener {
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
 		
-		//
+		LOGGER.info("topic = " + new String(pattern));
+		
 		try {
-			JSONObject jObject = new JSONObject(new String(message.getBody()));		
-			JSONArray jArray = jObject.getJSONArray("data");
 			
+			JSONObject jObject = new JSONObject(new String(message.getBody()));		
+			JSONArray jArray = jObject.getJSONArray("data");			
 			JSONObject obj = jArray.getJSONObject(0);
 			LOGGER.info(obj.toString());
-			//LOGGER.info(obj.getBigDecimal("volume").toString());
+			
 		}catch (JSONException e) {
-			// TODO: handle exception
 		}
 	}
 }

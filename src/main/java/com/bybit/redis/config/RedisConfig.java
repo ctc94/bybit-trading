@@ -28,11 +28,11 @@ public class RedisConfig {
 		return new MessageListenerAdapter(redisMessageSubscriber);
 	}
 
-	@Bean
-	public RedisTemplate<String, Object> template(RedisConnectionFactory connectionFactory) {
-		final RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-		template.setConnectionFactory(connectionFactory);
-		template.setValueSerializer(new StringRedisSerializer());
-		return template;
-	}
+//	@Bean
+//	public RedisTemplate<String, Object> template(RedisConnectionFactory connectionFactory) {
+//		final RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
+//		template.setConnectionFactory(connectionFactory);
+//		template.setValueSerializer(new StringRedisSerializer());
+//		return template;
+//	}
 }
