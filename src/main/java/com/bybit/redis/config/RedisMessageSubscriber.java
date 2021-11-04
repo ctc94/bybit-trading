@@ -16,17 +16,35 @@ public class RedisMessageSubscriber implements MessageListener {
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-		
-		LOGGER.info("topic = " + new String(pattern));
+		//LOGGER.info("redis topic = " + new String(pattern));
+		JSONObject jObject = new JSONObject(new String(message.getBody()));		
+		String topic = getTopic(jObject);
+		LOGGER.info("websocket topic = " + topic);
+		JSONObject obj = getData(jObject);
+		LOGGER.info(obj.toString());
+	}
+	
+	private String getTopic(JSONObject jObject) {
 		
 		try {
-			
-			JSONObject jObject = new JSONObject(new String(message.getBody()));		
-			JSONArray jArray = jObject.getJSONArray("data");			
-			JSONObject obj = jArray.getJSONObject(0);
-			LOGGER.info(obj.toString());
-			
+			String topic = jObject.getString("topic");
+			return topic;
 		}catch (JSONException e) {
+			return "";
+		}
+		
+	}
+	
+	private JSONObject getData(JSONObject jObject) {
+		
+		try {
+			JSONArray jArray = jObject.getJSONArray("data");
+			JSONObject obj = jArray.getJSONObject(0);
+			return obj;
+		}catch (JSONException e) {
+			return null;
 		}
 	}
 }
+
+
