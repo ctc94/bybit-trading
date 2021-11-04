@@ -1,5 +1,10 @@
 package com.bybit.redis.config;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,35 +21,88 @@ public class RedisMessageSubscriber implements MessageListener {
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
-		//LOGGER.info("redis topic = " + new String(pattern));
-		JSONObject jObject = new JSONObject(new String(message.getBody()));		
-		String topic = getTopic(jObject);
-		LOGGER.info("websocket topic = " + topic);
-		JSONObject obj = getData(jObject);
-		LOGGER.info(obj.toString());
+		String msg = new String(message.getBody());
+		//
+		if (msg.indexOf("last_price") == -1)
+			return;
+		
+		//LOGGER.info(msg);
+		JSONObject jObject = new JSONObject(msg);
+		
+		
+		//String topic = getValue(jObject,"topic");
+		
+		JSONObject obj = getUpdate(jObject);
+		//LOGGER.info(obj.toString());
+		LOGGER.info("last_price="+getValue(obj,"last_price"));
+		LOGGER.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
+		LOGGER.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
+		LOGGER.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
 	}
 	
-	private String getTopic(JSONObject jObject) {
+	private String getDateStr(String timestamp) {
+		long time = Long.parseLong(timestamp)/1000;
+		ZoneId zone = ZoneId.systemDefault();
+		Instant instant = Instant.ofEpochMilli(time);
+		ZonedDateTime zonedDateTime = instant.atZone(zone);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+		//System.out.println("Asia/Seoul : " + zonedDateTime33.format(formatter));
+		return zonedDateTime.format(formatter);
 		
+	}
+	
+	private String getValue(JSONObject jObject,String key) {
+		try {
+			return jObject.get(key).toString();
+		} catch (JSONException e) {
+			return "";
+		}
+
+	}
+
+	private String getTopic(JSONObject jObject) {
+
 		try {
 			String topic = jObject.getString("topic");
 			return topic;
-		}catch (JSONException e) {
+		} catch (JSONException e) {
 			return "";
 		}
-		
+
 	}
-	
+
+	/**
+	 * instrument_info용 데이터가져오기
+	 * 
+	 * @param jObject
+	 * @return
+	 */
+	private JSONObject getUpdate(JSONObject jObject) {
+
+		try {
+			JSONObject data = jObject.getJSONObject("data");
+			JSONArray jArray = data.getJSONArray("update");
+			JSONObject obj = jArray.getJSONObject(0);
+			return obj;
+		} catch (JSONException e) {
+			return new JSONObject();
+		}
+	}
+
+	/**
+	 * klineV2용 데이터가져오기
+	 * 
+	 * @param jObject
+	 * @return
+	 */
 	private JSONObject getData(JSONObject jObject) {
-		
+
 		try {
 			JSONArray jArray = jObject.getJSONArray("data");
 			JSONObject obj = jArray.getJSONObject(0);
 			return obj;
-		}catch (JSONException e) {
+		} catch (JSONException e) {
 			return null;
 		}
 	}
 }
-
-
