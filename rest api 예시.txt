@@ -1,0 +1,7 @@
+#레버리지 조정의 예
+param_str = "api_key=B2Rou0PLPpGqcU0Vu2&leverage=100&symbol=BTCUSD&timestamp=1542434791747"
+
+# api_key=B2Rou0PLPpGqcU0Vu2&
+# leverage=100&
+# symbol=BTCUSD&
+# timestamp=1542434791747

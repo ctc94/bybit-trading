@@ -29,8 +29,6 @@ public class RedisMessageSubscriber implements MessageListener {
 		//LOGGER.info(msg);
 		JSONObject jObject = new JSONObject(msg);
 		
-		//String topic = getValue(jObject,"topic");
-		
 		JSONObject obj = getUpdate(jObject);
 		//LOGGER.info(obj.toString());
 		LOGGER.info("last_price="+getValue(obj,"last_price"));
