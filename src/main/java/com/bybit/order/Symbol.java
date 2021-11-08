@@ -7,4 +7,6 @@ public class Symbol {
 	public String lastPrice;
 	public Map<String, Object> myPositionMap;
 	
+	public String size;
+	
 }
