@@ -21,7 +21,6 @@ public class ScheduledOrder {
 	@Scheduled(fixedRate = 2000)
 	public void getLastPrice() {
 		log.info("lastPrice =>" + OrderInfo.BSTUSD.lastPrice);
-
 	}
 
 	@Scheduled(fixedRate = 60000)
@@ -36,9 +35,13 @@ public class ScheduledOrder {
 		log.info(OrderInfo.BSTUSD.myPositionMap.toString());
 		log.info("entry_price=>"+OrderInfo.BSTUSD.myPositionMap.get("entry_price"));
 		log.info("size=>"+OrderInfo.BSTUSD.myPositionMap.get("size"));
+		
+		if(((Integer)OrderInfo.BSTUSD.myPositionMap.get("size")).intValue() == 0) return;
 		//log.info(OrderInfo.BSTUSD.myPositionMap.get("unrealised_pnl").toString());
 		
 		Double unrealised_pnl = (Double)OrderInfo.BSTUSD.myPositionMap.get("unrealised_pnl");
+		
+		if(OrderInfo.BSTUSD.lastPrice == null) return;
 		
 		float lastPrice = Float.parseFloat(OrderInfo.BSTUSD.lastPrice);
 		float wallet_balance = Float.parseFloat((String)OrderInfo.BSTUSD.myPositionMap.get("wallet_balance"));
