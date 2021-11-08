@@ -5,3 +5,51 @@ param_str = "api_key=B2Rou0PLPpGqcU0Vu2&leverage=100&symbol=BTCUSD&timestamp=154
 # leverage=100&
 # symbol=BTCUSD&
 # timestamp=1542434791747
+
+/v2/private/order/create
+
+curl "https://api.bybit.com/v2/private/order/list?api_key=Q8P5vdot8RRonx9Wka&timestamp=1636192697980&sign=282e9484d59de5dd798117181b943f0397e702e4534c47ea12d8cb0e700732eb&symbol=BTCUSD"
+
+ {ret_code=0
+ret_msg=OK
+ext_code=
+ext_info=
+result={id=0
+position_idx=0
+mode=0
+user_id=2179928
+risk_id=1
+symbol=BTCUSD
+side=Buy
+size=320
+position_value=0.00523169
+entry_price=61165.70362541
+is_isolated=true
+auto_add_margin=0
+leverage=5
+effective_leverage=5
+position_margin=0.00105105
+liq_price=51185
+bust_price=50971.5
+occ_closing_fee=0.00000471
+occ_funding_fee=0
+take_profit=0
+stop_loss=0
+trailing_stop=0
+position_status=Normal
+deleverage_indicator=2
+oc_calc_data={"blq":0,"slq":0,"bmp":0,"smp":0,"fq":-320,"bv2c":0.20165,"sv2c":0.20135}
+order_margin=0
+wallet_balance=0.00194324
+realised_pnl=0.00000094
+unrealised_pnl=-8.411E-5
+cum_realised_pnl=-0.20201445
+cross_seq=10553031564
+position_seq=4341039252
+created_at=2021-01-21T16:24:05Z
+updated_at=2021-11-06T11:06:35.251960779Z
+tp_sl_mode=Full}
+time_now=1636196795.600541
+rate_limit_status=119
+rate_limit_reset_ms=1636196795594
+rate_limit=120}

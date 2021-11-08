@@ -54,10 +54,10 @@ public class OrderUtilTest {
 		
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
-        map.put("order_type", "Limit");//[Limit,Market]
-        map.put("qty", "10");
+        map.put("order_type", "Market");//[Limit,Market]
+        map.put("qty", "100");
         map.put("side", "Buy");//[Sell,Buy]
-        map.put("price", "61150");
+        //map.put("price", "61150");
         map.put("time_in_force", "GoodTillCancel");
         map.put("timestamp", OrderUtil.toEpochMilli()+"");
         map.put("api_key", OrderUtil.getApiKey());
@@ -71,10 +71,11 @@ public class OrderUtilTest {
 	public void testOrderCreate() {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
-        map.put("order_type", "Limit");//[Limit,Market]
+        map.put("order_type", "Market");//[Limit,Market]
         map.put("qty", "1");
         map.put("side", "Sell");//[Sell,Buy]
-        map.put("price", "60450");        
+        //map.put("price", "62000");
+        map.put("stop_loss", "62025");
         
         Map<String, String> resMap = OrderUtil.orderCreate(apiUrl,map);
         log.info(resMap.toString());
@@ -86,7 +87,7 @@ public class OrderUtilTest {
 		map.put("symbol", "BTCUSD");
 		map.put("order_status", "New");
         
-        Map<String, String> resMap = OrderUtil.getOrder(apiUrl,map);
+        Map<String, Object> resMap = OrderUtil.getOrder(apiUrl,map);
         log.info(resMap.toString());
 	}
 	
@@ -114,7 +115,18 @@ public class OrderUtilTest {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
         
-        Map<String, String> resMap = OrderUtil.getMyPosition(apiUrl,map);
+        Map<String, Object> resMap = OrderUtil.getMyPosition(apiUrl,map);
+        log.info(resMap.toString());
+	}
+	
+	@Test
+	public void testPostOrderReplace() {
+		TreeMap<String,String> map = OrderUtil.getTreeMap();
+		map.put("symbol", "BTCUSD");
+		map.put("order_id", "93f03188-f372-4f10-9386-9e59abd1adfe");
+		map.put("stop_loss", "62050");
+        
+        Map<String, String> resMap = OrderUtil.postOrderReplace(apiUrl,map);
         log.info(resMap.toString());
 	}
 

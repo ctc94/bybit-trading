@@ -86,7 +86,7 @@ public class OrderUtil {
 		return postNewCall(apiUrl+"/v2/private/order/create",queryStr);
 	}
 	
-	public static Map<String, String> getOrder(String apiUrl,TreeMap<String,String> map) {
+	public static Map<String, Object> getOrder(String apiUrl,TreeMap<String,String> map) {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
@@ -116,7 +116,7 @@ public class OrderUtil {
 		return postNewCall(apiUrl+"/v2/private/order/cancelAll",queryStr);
 	}
 	
-	public static Map<String, String> getMyPosition(String apiUrl,TreeMap<String,String> map) {
+	public static Map<String, Object> getMyPosition(String apiUrl,TreeMap<String,String> map) {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
@@ -124,6 +124,16 @@ public class OrderUtil {
 		System.out.println(queryStr);
 		//return Map.of();
 		return getNewCall(apiUrl+"/v2/private/position/list",queryStr);
+	}
+	
+	public static Map<String, String> postOrderReplace(String apiUrl,TreeMap<String,String> map) {
+		map.put("timestamp", toEpochMilli()+"");
+        map.put("api_key", getApiKey());
+		
+		String queryStr = genQueryString(map, getSecret());
+		System.out.println(queryStr);
+		//return Map.of();
+		return postNewCall(apiUrl+"/v2/private/order/replace",queryStr);
 	}
 	
 	/*
@@ -153,7 +163,7 @@ public class OrderUtil {
 	/*
 	 * 공통 호출 함수
 	 */
-	private static Map<String, String> getNewCall(String fullUrl,String queryStr) {
+	private static Map<String, Object> getNewCall(String fullUrl,String queryStr) {
 		OkHttpClient client = new OkHttpClient();
         //RequestBody body=new FormBody.Builder().build();
         
@@ -166,7 +176,7 @@ public class OrderUtil {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Response response = call.execute(); 
-            Map<String, String> resMap = mapper.readValue(response.body().string(),Map.class);
+            Map<String, Object> resMap = mapper.readValue(response.body().string(),Map.class);
             return resMap;
         }catch (IOException e){
             e.printStackTrace();
