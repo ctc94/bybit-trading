@@ -14,6 +14,8 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Service;
 
+import com.bybit.order.OrderInfo;
+
 @Service
 public class RedisMessageSubscriber implements MessageListener {
 
@@ -30,11 +32,12 @@ public class RedisMessageSubscriber implements MessageListener {
 		JSONObject jObject = new JSONObject(msg);
 		
 		JSONObject obj = getUpdate(jObject);
+		OrderInfo.BSTUSD.lastPrice = getValue(obj,"last_price");
 		//LOGGER.info(obj.toString());
-		LOGGER.info("last_price="+getValue(obj,"last_price"));
-		LOGGER.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
-		LOGGER.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
-		LOGGER.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
+		//LOGGER.info("last_price="+getValue(obj,"last_price"));
+//		LOGGER.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
+//		LOGGER.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
+//		LOGGER.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
 	}
 	
 	private String getDateStr(String timestamp) {
