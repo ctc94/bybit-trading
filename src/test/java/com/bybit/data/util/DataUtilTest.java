@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.bybit.order.OrderInfo;
 import com.bybit.order.util.DateUtil;
 import com.bybit.order.util.OrderUtil;
 
@@ -23,7 +24,7 @@ public class DataUtilTest {
 	
 	
 	@Test
-	public void testgetKlineIndexPrice() {
+	public void testgetKline() {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
         map.put("interval", "5");
@@ -35,18 +36,22 @@ public class DataUtilTest {
         log.info(DateUtil.getDefaultDateStr(OrderUtil.toEpochMilli() + ""));
         
         map.put("from", ((OrderUtil.toEpochMilli()/1000) - fromSeconde)+"");
-        map.put("limit", "30");
+        map.put("limit", "35");
         
-        Map<String, Object> resMap = DataUtil.getKlineIndexPrice(apiUrl,map);
+        Map<String, Object> resMap = DataUtil.getKline(apiUrl,map);
         //log.info(resMap.toString());
         
-        List<Map<String, Object>> list = (List<Map<String, Object>>) resMap.get("result");
-        
+        List<Map<String, Object>> list = (List<Map<String, Object>>)resMap.get("result");
+        Map<String, Map<String, Object>> KlineMap_5 = new TreeMap<String, Map<String, Object>>();
         for (Map<String, Object> m : list) {
-        	long open_time = ((Integer)m.get("open_time")).longValue()*1000;
-        	m.put("dateTime", DateUtil.getDefaultDateStr(open_time+""));
+        	String key = m.get("open_time").toString();
+        	m.put("date_time", DateUtil.getDefaultDateStr(key,1000));
+        	KlineMap_5.put(key, m);
 			log.info(m.toString());
 		}
+        
+        OrderInfo.BSTUSD.KlineMap_5 = KlineMap_5;
+        
         
 	}
 

@@ -12,19 +12,59 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.bybit.order.OrderInfo;
+import com.bybit.order.util.DateUtil;
 
 @Service
 public class RedisMessageSubscriber implements MessageListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RedisMessageSubscriber.class);
+	private static final Logger log = LoggerFactory.getLogger(RedisMessageSubscriber.class);
+	private static String before_open_time = "";
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
 		String msg = new String(message.getBody());
-		//
+		
+		getKline_5_BTCUSD(msg);
+		getLastPrice_BTCUSD(msg);
+		
+	}
+	//@Async
+	private void getKline_5_BTCUSD(String msg) {
+		if (msg.indexOf("klineV2.5.BTCUSD") == -1)
+			return;
+		
+		if(OrderInfo.BSTUSD.KlineMap_5 == null) return;
+		
+		JSONObject jObject = new JSONObject(msg);
+		JSONObject obj = getData(jObject);
+		String start = getValue(obj,"start");
+		
+		if("".equals(before_open_time)) {
+			before_open_time = start;
+		}
+		
+		if(!start.equals(before_open_time)) {
+			//to-do: 이동평균선 구하기,R값구하기
+			before_open_time = start;
+			
+			log.info("before_open_time =>"+ before_open_time);
+			
+		}
+		
+		obj.put("open_time", obj.get("start"));
+		obj.put("date_time", DateUtil.getDefaultDateStr(start,1000));
+		OrderInfo.BSTUSD.KlineMap_5.put(start,obj.toMap());
+		
+		log.info(obj.toString());
+		log.info("OrderInfo.BSTUSD.KlineMap_5 size : " +OrderInfo.BSTUSD.KlineMap_5.keySet().size());
+	}
+
+	//@Async
+	private void getLastPrice_BTCUSD(String msg) {
 		if (msg.indexOf("last_price") == -1)
 			return;
 		
@@ -33,24 +73,13 @@ public class RedisMessageSubscriber implements MessageListener {
 		
 		JSONObject obj = getUpdate(jObject);
 		OrderInfo.BSTUSD.lastPrice = getValue(obj,"last_price");
-		//LOGGER.info(obj.toString());
-		//LOGGER.info("last_price="+getValue(obj,"last_price"));
-//		LOGGER.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
-//		LOGGER.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
-//		LOGGER.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
-	}
-	
-	private String getDateStr(String timestamp) {
-		long time = Long.parseLong(timestamp)/1000;
-		ZoneId zone = ZoneId.systemDefault();
-		Instant instant = Instant.ofEpochMilli(time);
-		ZonedDateTime zonedDateTime = instant.atZone(zone);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-		//System.out.println("Asia/Seoul : " + zonedDateTime33.format(formatter));
-		return zonedDateTime.format(formatter);
+		log.info("last_price="+getValue(obj,"last_price"));
+//		log.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
+//		log.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
+//		log.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
 		
 	}
-	
+
 	private String getValue(JSONObject jObject,String key) {
 		try {
 			return jObject.get(key).toString();

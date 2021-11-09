@@ -7,12 +7,12 @@ import com.bybit.order.util.OrderUtil;
 
 public class DataUtil {
 
-	public static Map<String, Object> getKlineIndexPrice(String apiUrl, TreeMap<String, String> map) {
+	public static Map<String, Object> getKline(String apiUrl, TreeMap<String, String> map) {
 		
 		String queryStr = OrderUtil.getQueryString(map, "");
 		System.out.println(queryStr);
 		//return Map.of();
-		return OrderUtil.getNewCall(apiUrl+"/v2/public/index-price-kline",queryStr);
+		return OrderUtil.getNewCall(apiUrl+"/v2/public/kline/list",queryStr);
 	}
 
 }
