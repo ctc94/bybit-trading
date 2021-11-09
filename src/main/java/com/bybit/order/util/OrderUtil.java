@@ -48,7 +48,7 @@ public class OrderUtil {
 		return Instant.now().toEpochMilli();
 	}
 
-	public static String genQueryString(TreeMap<String, String> params, String secret) {
+	public static String getQueryString(TreeMap<String, String> params, String secret) {
 		Set<String> keySet = params.keySet();
 		Iterator<String> iter = keySet.iterator();
 		StringBuilder sb = new StringBuilder();
@@ -72,6 +72,7 @@ public class OrderUtil {
 	}
 
 	public static String getSign(String secret, String sb) {
+		if("".equals(secret)) return "";
 		return bytesToHex(getByte(secret, sb));
 	}
 	
@@ -81,7 +82,7 @@ public class OrderUtil {
         map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
-		String queryStr = genQueryString(map, getSecret());
+		String queryStr = getQueryString(map, getSecret());
 		
 		return postNewCall(apiUrl+"/v2/private/order/create",queryStr);
 	}
@@ -90,7 +91,7 @@ public class OrderUtil {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
-		String queryStr = genQueryString(map, getSecret());
+		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
 		return getNewCall(apiUrl+"/v2/private/order/list",queryStr);
@@ -100,7 +101,7 @@ public class OrderUtil {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
-		String queryStr = genQueryString(map, getSecret());
+		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
 		return postNewCall(apiUrl+"/v2/private/order/cancel",queryStr);
@@ -110,7 +111,7 @@ public class OrderUtil {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
-		String queryStr = genQueryString(map, getSecret());
+		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
 		return postNewCall(apiUrl+"/v2/private/order/cancelAll",queryStr);
@@ -120,7 +121,7 @@ public class OrderUtil {
 		map.put("timestamp", toEpochMilli()+"");
         map.put("api_key", getApiKey());
 		
-		String queryStr = genQueryString(map, getSecret());
+		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
 		return getNewCall(apiUrl+"/v2/private/position/list",queryStr);
@@ -153,7 +154,7 @@ public class OrderUtil {
 	/*
 	 * 공통 호출 함수
 	 */
-	private static Map<String, Object> getNewCall(String fullUrl,String queryStr) {
+	public static Map<String, Object> getNewCall(String fullUrl,String queryStr) {
 		OkHttpClient client = new OkHttpClient();
         //RequestBody body=new FormBody.Builder().build();
         
@@ -198,8 +199,4 @@ public class OrderUtil {
 		}
 		return hexString.toString();
 	}
-	
-	
-	
-
 }

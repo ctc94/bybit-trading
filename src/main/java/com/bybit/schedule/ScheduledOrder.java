@@ -23,7 +23,7 @@ public class ScheduledOrder {
 		log.info("lastPrice =>" + OrderInfo.BSTUSD.lastPrice);
 	}
 
-	@Scheduled(fixedRate = 60000)
+	//@Scheduled(fixedRate = 60000)
 	public void getMyPosition() {
 		//if (OrderInfo.BSTUSD.myPositionMap == null) {
 			TreeMap<String, String> map = OrderUtil.getTreeMap();

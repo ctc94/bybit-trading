@@ -62,7 +62,7 @@ public class OrderUtilTest {
         map.put("timestamp", OrderUtil.toEpochMilli()+"");
         map.put("api_key", OrderUtil.getApiKey());
 		
-		String queryStr = OrderUtil.genQueryString(map, OrderUtil.getSecret());
+		String queryStr = OrderUtil.getQueryString(map, OrderUtil.getSecret());
 		log.info(queryStr);
 		
 	}
