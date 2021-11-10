@@ -23,11 +23,12 @@ public class ScheduledOrder {
 
 	@Scheduled(fixedRate = 2000)
 	public void getLastPrice() {
-		//log.info("lastPrice =>" + OrderInfo.BSTUSD.lastPrice);
+		log.info("lastPrice =>" + OrderInfo.BSTUSD.lastPrice);
 	}
 	
+	//한번 동작
 	@Scheduled(fixedRate = Long.MAX_VALUE)
-	public void getKline() {
+	public void getKline_5() {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
         map.put("interval", "5");
@@ -39,21 +40,25 @@ public class ScheduledOrder {
         log.info(DateUtil.getDefaultDateStr(OrderUtil.toEpochMilli() + ""));
         
         map.put("from", ((OrderUtil.toEpochMilli()/1000) - fromSeconde)+"");
-        map.put("limit", "35");
+        map.put("limit", "30");
         
         Map<String, Object> resMap = DataUtil.getKline(apiUrl,map);
         //log.info(resMap.toString());
         
         List<Map<String, Object>> list = (List<Map<String, Object>>)resMap.get("result");
         Map<String, Map<String, Object>> KlineMap_5 = new TreeMap<String, Map<String, Object>>();
+        String last_key = "";
         for (Map<String, Object> m : list) {
         	String key = m.get("open_time").toString();
+        	last_key = key;
         	m.put("date_time", DateUtil.getDefaultDateStr(key,1000));
         	KlineMap_5.put(key, m);
-			log.info(m.toString());
+			//log.info(m.toString());
 		}
-        
         OrderInfo.BSTUSD.KlineMap_5 = KlineMap_5;
+        
+        //이동 평균
+        DataUtil.getEMA(KlineMap_5,30,last_key);
 	}
 
 	//@Scheduled(fixedRate = 60000)

@@ -1,10 +1,5 @@
 package com.bybit.redis.config;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.bybit.data.util.DataUtil;
 import com.bybit.order.OrderInfo;
 import com.bybit.order.util.DateUtil;
 
@@ -49,9 +44,12 @@ public class RedisMessageSubscriber implements MessageListener {
 		
 		if(!start.equals(before_open_time)) {
 			//to-do: 이동평균선 구하기,R값구하기
+			DataUtil.getEMA(OrderInfo.BSTUSD.KlineMap_5,30,start);
+			
 			before_open_time = start;
 			
 			log.info("before_open_time =>"+ before_open_time);
+			log.info("OrderInfo.BSTUSD.KlineMap_5 size : " +(OrderInfo.BSTUSD.KlineMap_5.keySet().size()+1));
 			
 		}
 		
@@ -59,8 +57,8 @@ public class RedisMessageSubscriber implements MessageListener {
 		obj.put("date_time", DateUtil.getDefaultDateStr(start,1000));
 		OrderInfo.BSTUSD.KlineMap_5.put(start,obj.toMap());
 		
-		log.info(obj.toString());
-		log.info("OrderInfo.BSTUSD.KlineMap_5 size : " +OrderInfo.BSTUSD.KlineMap_5.keySet().size());
+		//log.info(obj.toString());
+		
 	}
 
 	//@Async
@@ -73,7 +71,7 @@ public class RedisMessageSubscriber implements MessageListener {
 		
 		JSONObject obj = getUpdate(jObject);
 		OrderInfo.BSTUSD.lastPrice = getValue(obj,"last_price");
-		log.info("last_price="+getValue(obj,"last_price"));
+		//log.info("last_price="+getValue(obj,"last_price"));
 //		log.info("last_tick_direction="+getValue(obj,"last_tick_direction"));
 //		log.info("timestamp_e6="+getValue(jObject,"timestamp_e6"));
 //		log.info("dateTime="+getDateStr(getValue(jObject,"timestamp_e6")));
