@@ -36,6 +36,7 @@ public class RedisMessageSubscriber implements MessageListener {
 		
 		JSONObject jObject = new JSONObject(msg);
 		JSONObject obj = getData(jObject);
+		if(obj == null) return;
 		String start = getValue(obj,"start");
 		
 		if("".equals(before_open_time)) {
@@ -81,7 +82,7 @@ public class RedisMessageSubscriber implements MessageListener {
 	private String getValue(JSONObject jObject,String key) {
 		try {
 			return jObject.get(key).toString();
-		} catch (JSONException e) {
+		} catch (Exception e) {
 			return "";
 		}
 

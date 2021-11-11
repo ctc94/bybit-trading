@@ -71,7 +71,7 @@ public class OrderUtilTest {
 	public void testOrderCreate() {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
 		map.put("symbol", "BTCUSD");
-        map.put("order_type", "Market");//[Limit,Market]
+        map.put("order_type", "Limit");//[Limit,Market]
         map.put("qty", "200");
         map.put("side", "Sell");//[Buy,Sell]
         //map.put("price", "60450");        
