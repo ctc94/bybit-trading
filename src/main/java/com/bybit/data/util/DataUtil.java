@@ -16,7 +16,7 @@ public class DataUtil {
 	public static Map<String, Object> getKline(String apiUrl, TreeMap<String, String> map) {
 		
 		String queryStr = OrderUtil.getQueryString(map, "");
-		return OrderUtil.getNewCall(apiUrl+"/v2/public/kline/list",queryStr);
+		return OrderUtil.getNewCall(apiUrl+"/public/linear/kline",queryStr);
 	}
 
 	public static void getEMA(Map<String, Map<String, Object>> map,int emaSize,String open_time) {

@@ -18,7 +18,12 @@ public class RedisConfig {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
 		// container.addMessageListener(listenerAdapter, new PatternTopic("chart"));
-		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("bybit-data"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("instrument_info.100ms.BTCUSDT"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("candle.5.BTCUSDT"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("candle.30.BTCUSDT"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("candle.60.BTCUSDT"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("candle.240.BTCUSDT"));
+		container.addMessageListener(messageListener(redisMessageSubscriber), new PatternTopic("candle.D.BTCUSDT"));
 
 		return container;
 	}

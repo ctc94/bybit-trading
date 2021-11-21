@@ -84,7 +84,8 @@ public class OrderUtil {
 		
 		String queryStr = getQueryString(map, getSecret());
 		
-		return postNewCall(apiUrl+"/v2/private/order/create",queryStr);
+		//return postNewCall(apiUrl+"/private/linear/order/create",queryStr);
+		return postNewCall(apiUrl+"/private/linear/order/create",queryStr);
 	}
 	
 	public static Map<String, Object> getOrder(String apiUrl,TreeMap<String,String> map) {
@@ -94,7 +95,7 @@ public class OrderUtil {
 		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
-		return getNewCall(apiUrl+"/v2/private/order/list",queryStr);
+		return getNewCall(apiUrl+"/private/linear/order/list",queryStr);
 	}
 	
 	public static Map<String, String> getOrderCancel(String apiUrl,TreeMap<String,String> map) {
@@ -104,7 +105,7 @@ public class OrderUtil {
 		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
-		return postNewCall(apiUrl+"/v2/private/order/cancel",queryStr);
+		return postNewCall(apiUrl+"/private/linear/order/cancel",queryStr);
 	}
 	
 	public static Map<String, String> getOrderCancelAll(String apiUrl,TreeMap<String,String> map) {
@@ -114,7 +115,7 @@ public class OrderUtil {
 		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
-		return postNewCall(apiUrl+"/v2/private/order/cancelAll",queryStr);
+		return postNewCall(apiUrl+"/private/linear/order/cancelAll",queryStr);
 	}
 	
 	public static Map<String, Object> getMyPosition(String apiUrl,TreeMap<String,String> map) {
@@ -124,7 +125,7 @@ public class OrderUtil {
 		String queryStr = getQueryString(map, getSecret());
 		System.out.println(queryStr);
 		//return Map.of();
-		return getNewCall(apiUrl+"/v2/private/position/list",queryStr);
+		return getNewCall(apiUrl+"/private/linear/position/list",queryStr);
 	}
 	
 	/*

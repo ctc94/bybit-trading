@@ -21,22 +21,61 @@ public class RedisMessageSubscriber implements MessageListener {
 
 	@Override
 	public void onMessage(Message message, byte[] pattern) {
+		String topic = new String(pattern);
+		//log.info(new String(pattern));
 		String msg = new String(message.getBody());
 		
-		getKline_5_BTCUSD(msg);
-		getLastPrice_BTCUSD(msg);
+		if("instrument_info.100ms.BTCUSDT".equals(topic)) {
+			getLastPrice_BTCUSDT(msg);
+		}
+		
+		if("candle.5.BTCUSDT".equals(topic)) {
+			getKline_5_BTCUSDT(msg);
+		}
+		
+		if("candle.30.BTCUSDT".equals(topic)) {
+			getKline_30_BTCUSDT(msg);
+		}
+		
+		if("candle.60.BTCUSDT".equals(topic)) {
+			getKline_60_BTCUSDT(msg);
+		}
+		
+		if("candle.240.BTCUSDT".equals(topic)) {
+			getKline_240_BTCUSDT(msg);
+		}
+		
+		if("candle.D.BTCUSDT".equals(topic)) {
+			getKline_D_BTCUSDT(msg);
+		}
+		
+		
+	}
+	private void getKline_D_BTCUSDT(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+	private void getKline_240_BTCUSDT(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+	private void getKline_60_BTCUSDT(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+	private void getKline_30_BTCUSDT(String msg) {
+		// TODO Auto-generated method stub
 		
 	}
 	//@Async
-	private void getKline_5_BTCUSD(String msg) {
-		if (msg.indexOf("klineV2.5.BTCUSD") == -1)
-			return;
+	private void getKline_5_BTCUSDT(String msg) {
 		
 		if(OrderInfo.BSTUSD.KlineMap_5 == null) return;
 		
 		JSONObject jObject = new JSONObject(msg);
 		JSONObject obj = getData(jObject);
 		if(obj == null) return;
+		//log.info(obj.toString());
 		String start = getValue(obj,"start");
 		
 		if("".equals(before_open_time)) {
@@ -63,7 +102,7 @@ public class RedisMessageSubscriber implements MessageListener {
 	}
 
 	//@Async
-	private void getLastPrice_BTCUSD(String msg) {
+	private void getLastPrice_BTCUSDT(String msg) {
 		if (msg.indexOf("last_price") == -1)
 			return;
 		

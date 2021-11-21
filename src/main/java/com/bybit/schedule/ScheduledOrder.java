@@ -30,7 +30,7 @@ public class ScheduledOrder {
 	@Scheduled(fixedRate = Long.MAX_VALUE)
 	public void getKline_5() {
 		TreeMap<String,String> map = OrderUtil.getTreeMap();
-		map.put("symbol", "BTCUSD");
+		map.put("symbol", "BTCUSDT");
         map.put("interval", "5");
         int fromSeconde = 5*30*60;
         log.info("fromSeconde ==>"+fromSeconde + "");
